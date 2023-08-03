@@ -1,23 +1,15 @@
-import { SSTConfig } from 'sst';
-import { Bucket, NextjsSite } from 'sst/constructs';
+import { SSTConfig } from "sst";
+import { Web } from "./stacks/Web";
+import { API } from "./stacks/Api";
 
 export default {
   config(_input) {
     return {
-      name: 'kanban-task-manager',
-      region: 'us-east-1',
+      name: "kanban-task-manager",
+      region: "us-east-2",
     };
   },
   stacks(app) {
-    app.stack(function Site({ stack }) {
-      const bucket = new Bucket(stack, 'public');
-      const site = new NextjsSite(stack, 'site', {
-        bind: [bucket],
-      });
-
-      stack.addOutputs({
-        SiteUrl: site.url,
-      });
-    });
+    app.stack(Web).stack(API);
   },
 } satisfies SSTConfig;
